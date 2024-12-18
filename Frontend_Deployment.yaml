@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: pnt-quiz
+  labels:
+    app: my-app-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app-frontend
+  template:
+    metadata:
+      labels:
+        app: my-app-frontend
+    spec:
+      containers:
+      - name: frontend-container
+        image: 2602106856juanpriyasaputro.azurecr.io/juansaputro/handy-popularnetworktechnology-tobedeployed-frontend:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: pnt-quiz
+spec:
+  type: LoadBalancer  
+  selector:
+    app: my-app-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
